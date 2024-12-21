@@ -14,8 +14,8 @@ import {
 
 function App() {
   return (
-    <Router>
-      <Routes>
+    <Router >
+      <Routes >
           <Route exact path = "/" element = { <Welcome/> }/>
           <Route path = "/login" element = {<Login/>} />  
           <Route path='/register' element = {<Register />} />

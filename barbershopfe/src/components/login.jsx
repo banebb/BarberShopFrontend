@@ -1,11 +1,14 @@
 import React, { useState }  from "react";
 import barbershoppng from "../images/barbershop.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
     const [usernameOrEmailOrPhoneNumber, setUsernameOrEmailOrPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         const response = await fetch("http://localhost:8081/api/login", {
@@ -20,8 +23,12 @@ const Login = () => {
             })
         });
 
-        const data = await response;
-        console.log(data);
+        if(response.ok){
+            navigate("/makeAppointment");
+        } else {
+            const data = await response.text();
+            setAlertMessage(data);
+        }
     }
 
     return (
@@ -30,6 +37,11 @@ const Login = () => {
             <div className="flex flex-col gap-20 justify-center items-center h-screen bg-black">
                 <h1 className="text-orange-400 text-8xl text-center">Sign in</h1>
                 <img src={barbershoppng} alt="barbershop" className="w-1/12" />
+                {alertMessage && (
+                    <div className="bg-red-500 text-white p-4 rounded">
+                        {alertMessage}
+                    </div>
+                )} 
                 <div className="flex flex-col gap-4 justify-center items-center bg-black">
                     <label className="text-orange-400 font-bold"> Username/Email/Phone number</label>
                     <input 
