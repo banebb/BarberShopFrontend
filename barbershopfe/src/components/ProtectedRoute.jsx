@@ -7,8 +7,9 @@ const ProtectedRoute = ({ children }) => {
     useEffect(() => {
         const checkAuthentication = async () => {
             try {
-                const response = await fetch("http://localhost:8081", {
+                const response = await fetch("http://localhost:8081/api/isLogged", {
                     method: "GET",
+                    credentials: "include",
                 });
                 if (response.ok) {
                     setIsAuthenticated(true);

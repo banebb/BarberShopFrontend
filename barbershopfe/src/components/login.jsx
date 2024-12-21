@@ -10,6 +10,7 @@ const Login = () => {
     const handleLogin = async () => {
         const response = await fetch("http://localhost:8081/api/login", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
