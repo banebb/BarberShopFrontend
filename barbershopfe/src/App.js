@@ -5,6 +5,7 @@ import Login from './components/login';
 import Register from './components/register';
 import MakeAppointment from './components/makeAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
+import ThankYou from './components/thankYou';
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,6 +27,7 @@ function App() {
                   </ProtectedRoute>
                 }        
           />
+          <Route path='/thank-you' element= {<ThankYou /> } />
       </Routes>
     </Router>
   );

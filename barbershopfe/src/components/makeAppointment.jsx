@@ -1,21 +1,33 @@
 import React, { useState } from "react";
 import barbershoppng from "../images/barbershop.png";
 import { useNavigate, Link } from "react-router-dom";
+import './makeAppointment.css'; 
 
 const MakeAppointment = () => {
     const [date, setDate] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
+    const [notWorkingDay, setNotWorkingDay] = useState(false);
+    const [futureDate, setFutureDate] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [appointmentMade, setAppointmentMade] = useState(false);
 
     const handleDateChange = (e) => {
         const selectedDate = e.target.value;
+        const day = new Date(selectedDate).getDay();
         if (new Date(selectedDate) < new Date()) {
-            setAlertMessage("Please select a future date");
-            return;
+            setFutureDate(true);
         } else {
-            setAlertMessage("");
+            setFutureDate(false);
         }
+        if(day === 0 || day === 1){
+            //setAlertMessage("We are closed on Sundays and Mondays");
+            setNotWorkingDay(true);
+        } else {
+            setNotWorkingDay(false);
+        }
+        setAlertMessage("");
         setDate(selectedDate);
         handleGetAppointments(selectedDate);
     }
@@ -93,6 +105,7 @@ const MakeAppointment = () => {
         }
 
         const dateTimeString = date + "T" + selectedTime + ":00";
+        setIsLoading(true);
 
         try {
             const response = await fetch("http://localhost:8081/api/makeApointment", {
@@ -109,11 +122,14 @@ const MakeAppointment = () => {
             }
 
             const data = await response.json();
-            console.log("Appointment made:", data); // Debug log
-            setAlertMessage("Appointment successfully made!"); // Show success message in green
+            console.log("Appointment made:", data); // Debug log 
+            setAppointmentMade(true);
+            navigate("/thank-you", { state: { appointmentMade: true } });
         } catch (error) {
             console.error("Failed to make appointment:", error);
             setAlertMessage("Failed to make appointment"); // show alerts somwhere else
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -145,9 +161,10 @@ const MakeAppointment = () => {
                     </div>
                     
                 </div>
-                
-                {date && <h2 className="text-white">Available Times</h2>}
-                <div className="grid-flow-row-dense grid grid-cols-4 gap-4 text-white align-center">
+                {futureDate && <p className="text-center m-auto text-white">Please select date in the future</p>}
+                {!futureDate && notWorkingDay && <p className="text-center m-auto text-white">We are closed on Sundays and Mondays</p>}
+                {!futureDate && !notWorkingDay && date && <h2 className="text-white">Available Times</h2>}
+                {!futureDate && !notWorkingDay && <div className="grid-flow-row-dense grid grid-cols-4 gap-4 text-white align-center">
                     {availableTimes.map((time, index) => (
                         <div key={index} 
                              className={`text-center border-2 border-orange-400 rounded-lg px-5 py-2 cursor-pointer ${selectedTime === time ? 'bg-orange-400' : 'hover:bg-orange-400 hover:transtion hover:duration-150'}`}
@@ -158,12 +175,20 @@ const MakeAppointment = () => {
                         
                     ))}
                 </div>
-                {date && (
+                }
+                {!futureDate && !notWorkingDay && date && (
                         <button 
                             className="mt-4 text-white border-2 border-orange-400 rounded-lg px-5 py-2 active:bg-orange-400 hover:bg-orange-400 hover:transtion hover:duration-150"
                             onClick={handleMakeAppointment}
+                            disabled={isLoading}
                         >
-                            Make Appointment
+                            {isLoading ? (
+                                <div className="loading-dots">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            ) : "Make Appointment"}
                         </button>
                     )}
                 {date && availableTimes.length === 0 && (
