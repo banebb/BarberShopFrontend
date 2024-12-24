@@ -17,7 +17,7 @@ const ThankYou = () => {
             <p>Your appointment has been successfully made.</p>
             <button 
                 className="mt-4 text-white border-2 border-orange-400 rounded-lg px-5 py-2 active:bg-orange-400 hover:bg-orange-400 hover:transtion hover:duration-150"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
             >
                 Go to Home
             </button>

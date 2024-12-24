@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect }  from "react";
 import barbershoppng from "../images/barbershop.png";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,6 +9,28 @@ const Login = () => {
     const [alertMessage, setAlertMessage] = useState("");
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        checkIfLoggedIn();
+    });
+
+    const checkIfLoggedIn = async () => {
+        try {
+            const response = await fetch("http://localhost:8081/api/isLogged", {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (response.ok) {
+                navigate("/home");
+            }
+        } catch (error) {
+            console.error("Failed to check if logged in:", error);
+        }
+    };
 
     const handleLogin = async () => {
         const response = await fetch("http://localhost:8081/api/login", {
@@ -24,7 +46,7 @@ const Login = () => {
         });
 
         if(response.ok){
-            navigate("/makeAppointment");
+            navigate("/home");
         } else {
             const data = await response.text();
             setAlertMessage(data);

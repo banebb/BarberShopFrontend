@@ -6,6 +6,7 @@ import Register from './components/register';
 import MakeAppointment from './components/makeAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
 import ThankYou from './components/thankYou';
+import Home from './components/home';
 import {
   BrowserRouter as Router,
   Routes,
@@ -24,6 +25,13 @@ function App() {
                  element = {
                   <ProtectedRoute>
                     <MakeAppointment />
+                  </ProtectedRoute>
+                }        
+          />
+          <Route path='/home'
+                 element = {
+                  <ProtectedRoute>
+                    <Home />
                   </ProtectedRoute>
                 }        
           />

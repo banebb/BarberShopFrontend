@@ -135,7 +135,7 @@ const MakeAppointment = () => {
 
     return (
         <div className="bg-black h-screen">
-            <Link to="/"><p className="absolute top-8 left-8 text-white text-5xl"  >←</p></Link>
+            <Link to="/home"><p className="absolute top-8 left-8 text-white text-5xl"  >←</p></Link>
             <button 
                         className="absolute top-8 right-8 text-white border-2 border-orange-400 rounded-lg px-5 py-2 active:bg-orange-400  hover:bg-orange-400 hover:transtion hover:duration-150"
                         onClick={handleLogout}
