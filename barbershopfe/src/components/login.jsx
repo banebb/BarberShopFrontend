@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect, useCallback }  from "react";
 import barbershoppng from "../images/barbershop.png";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,11 +10,7 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        checkIfLoggedIn();
-    });
-
-    const checkIfLoggedIn = async () => {
+    const checkIfLoggedIn = useCallback(async () => {
         try {
             const response = await fetch("http://localhost:8081/api/isLogged", {
                 method: "GET",
@@ -30,7 +26,11 @@ const Login = () => {
         } catch (error) {
             console.error("Failed to check if logged in:", error);
         }
-    };
+    }, [navigate]);
+
+    useEffect(() => {
+        checkIfLoggedIn();
+    }, [checkIfLoggedIn]);
 
     const handleLogin = async () => {
         const response = await fetch("http://localhost:8081/api/login", {

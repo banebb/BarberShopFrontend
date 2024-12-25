@@ -7,6 +7,7 @@ import MakeAppointment from './components/makeAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
 import ThankYou from './components/thankYou';
 import Home from './components/home';
+import UsersAppointments from './components/usersappointments';
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,6 +37,13 @@ function App() {
                 }        
           />
           <Route path='/thank-you' element= {<ThankYou /> } />
+          <Route path='/usersappointments' 
+                  element = {
+                    <ProtectedRoute>
+                      <UsersAppointments />
+                    </ProtectedRoute>
+                  }
+          />
       </Routes>
     </Router>
   );
